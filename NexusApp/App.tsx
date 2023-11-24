@@ -10,22 +10,26 @@ const Cafe = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: 'example@example.com',
+          email: 'exampleexamplecom',
           passwordHash: 'hashedPassword',
           firstName: 'John',
           lastName: 'Doe',
-          dateOfBirth: '1990-01-01',
+          dateOfBirth: '19900101',
           gender: 'Male',
           receiveNotifications: true,
           biography: 'Sample biography',
-          lastActive: '2023-11-17T12:00:00',
+          lastActive: '20231117',
           location: 1,
         }),
       });
 
       if (response.ok) {
-        const responseData = await response.json();
-        console.log('Response:', responseData);
+        try {
+          const responseData = await response.json();
+          console.log('Response Data:', responseData);
+        } catch (jsonError) {
+          console.error('JSON Parsing Error:', jsonError);
+        }
       } else {
         console.error('Failed to create individual');
       }
