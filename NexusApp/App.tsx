@@ -1,49 +1,100 @@
-import React, { useState } from 'react';
-import { Button, Text, View } from 'react-native';
+import * as React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignUp from './navigation/SignUp';
+import Login from './navigation/login';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Cafe = () => {
-  const createIndividual = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/account/create-individual', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'exampleexamplecom',
-          passwordHash: 'hashedPassword',
-          firstName: 'John',
-          lastName: 'Doe',
-          dateOfBirth: '19900101',
-          gender: 'Male',
-          receiveNotifications: true,
-          biography: 'Sample biography',
-          lastActive: '20231117',
-          location: 1,
-        }),
-      });
+const Tab = createBottomTabNavigator();
 
-      if (response.ok) {
-        try {
-          const responseData = await response.json();
-          console.log('Response Data:', responseData);
-        } catch (jsonError) {
-          console.error('JSON Parsing Error:', jsonError);
-        }
-      } else {
-        console.error('Failed to create individual');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
+
+function HomeScreen({ navigation }) {
   return (
-    <View>
-      <Text>Welcome to the Cafe App!</Text>
-      <Button onPress={createIndividual} title="Create Individual" />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Sign Up"
+        onPress={() => navigation.navigate('SignUp')}
+      />
+      <Button
+        title="Log in"
+        onPress={() => navigation.navigate('Login')}
+      />
+      <Tab.Navigator>
+      <Tab.Screen name="Feed" component={SignUp} />
+      <Tab.Screen name="Messages" component={Login} />
+      </Tab.Navigator>
     </View>
   );
-};
+}
+const Stack = createNativeStackNavigator();
 
-export default Cafe;
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{title: 'Overview',headerStyle: {
+          backgroundColor: '#f4511e',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },}}
+        />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+
+    </NavigationContainer>
+    
+  );
+}
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Feed"
+      screenOptions={{
+        tabBarActiveTintColor: '#e91e63',
+      }}
+    >
+      <Tab.Screen
+        name="Feed"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={SignUp}
+        options={{
+          tabBarLabel: 'Updates',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="bell" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Login}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+export default App;
