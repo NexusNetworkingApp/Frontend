@@ -3,7 +3,7 @@ import { Button, Text, TextInput, View } from 'react-native';
 import {Image, ScrollView} from 'react-native';
 
 
-const SignUp = () => {
+const Discover = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -100,4 +100,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Discover;

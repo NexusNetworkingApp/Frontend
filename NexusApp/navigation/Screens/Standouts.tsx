@@ -3,7 +3,7 @@ import { Button, Text, TextInput, View } from 'react-native';
 import {Image, ScrollView} from 'react-native';
 
 
-const Login = () => {
+const Standouts = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
@@ -58,4 +58,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Standouts;
