@@ -42,28 +42,28 @@ export default function Profile() {
                     <Ionicons name="ios-arrow-back" size={24} color="#52575D" />
                     <Ionicons name="md-create" size={24} color="#52575D" /> 
                 </View>
-                {/* Interests Section */}
-                <View style={styles.infoContainer}>
-                    <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Julie</Text>
-                    <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Photographer</Text>
-                </View>
-                <View style={styles.sectionContainer}>
-                    <Text style={styles.sectionTitle}>Interests</Text>
-                    <Text style={styles.sectionContent}>Photography, Travel, Technology</Text>
-                </View>
-                 {/* Skills Section */}
-                 <View style={styles.sectionContainer}>
-                    <Text style={styles.sectionTitle}>Skills</Text>
-                    <Text style={styles.sectionContent}>Portrait Photography, Adobe Photoshop, Lightroom</Text>
-                </View>
+                {account.accountType === 'INDIVIDUAL' ? (
+                    <View style={styles.infoContainer}>
+                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Julie</Text>
+                        <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Photographer</Text>
+                    </View>
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.sectionTitle}>Interests</Text>
+                        <Text style={styles.sectionContent}>Photography, Travel, Technology</Text>
+                    </View>
+                    {/* Skills Section */}
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.sectionTitle}>Skills</Text>
+                        <Text style={styles.sectionContent}>Portrait Photography, Adobe Photoshop, Lightroom</Text>
+                    </View>
 
-                {/* Work History Section */}
-                <View style={styles.sectionContainer}>
-                    <Text style={styles.sectionTitle}>Work History</Text>
-                    <Text style={styles.sectionContent}>Freelance Photographer (2018 - Present)</Text>
-                    <Text style={styles.sectionContent}>Studio XYZ Photographer (2016 - 2018)</Text>
-                </View>
-
+                    {/* Work History Section */}
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.sectionTitle}>Work History</Text>
+                        <Text style={styles.sectionContent}>Freelance Photographer (2018 - Present)</Text>
+                        <Text style={styles.sectionContent}>Studio XYZ Photographer (2016 - 2018)</Text>
+                    </View>
+                )
                 <View style={{ marginTop: 32 }}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                         {/* ... (unchanged) */}
