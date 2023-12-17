@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+
 import {
   View,
   Text,
@@ -30,7 +31,9 @@ const Login = ({navigation}) => {
         setPassword('');
         // Navigate to the home page or perform any other desired action
 
-        navigation.navigate('Discover');
+        // navigation.navigate('Discover');
+        navigation.navigate('MyTabs');
+        
       } else {
         console.log('Login failed');
 

@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
                 AsyncStorage.setItem('isLoggedIn', 'true');
 
                 // Fetch account information and save it
-                const accountResponse = await axios.get(`${API_URL}/account/info/${accountType}/${email}`);
+                const accountResponse = await axios.get(`${API_URL}/account/info/${accountType.toUpperCase()}/${email}`);
                 const accountData = accountResponse.data;
                 setAccount(accountData);
                 AsyncStorage.setItem('account', JSON.stringify(accountData));

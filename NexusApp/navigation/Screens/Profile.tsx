@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profile() {
     const [account, setAccount] = useState(null);
-    
 
     useEffect(() => {
         const fetchAccount = async () => {
