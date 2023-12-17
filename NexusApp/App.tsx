@@ -42,7 +42,7 @@ function App() {
           <Stack.Screen name="Login" component={Login} />
 
           {isLoggedIn && account && (
-            <Stack.Screen name="Main">
+            <Stack.Screen name="MyTab">
               {() => (
                 <MyTabs userType={account.accountType} />
               )}

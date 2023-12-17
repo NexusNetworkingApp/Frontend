@@ -26,6 +26,7 @@ const Jobs = () => {
                 organizationName={item.organizationName} // Display organizationName
                 title={item.title}
                 type = {item.type}
+                image
                 variant
               />
             </TouchableOpacity>

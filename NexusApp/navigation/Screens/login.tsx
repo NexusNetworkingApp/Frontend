@@ -21,7 +21,7 @@ const Login = ({navigation}) => {
 
   const handleSubmit = async () => {
     try {
-      const loginSuccessful = await login(accountType, email, password);
+      const loginSuccessful = await login(accountType.toLowerCase(), email, password);
 
       if (loginSuccessful) {
         console.log('Login successful');
@@ -30,7 +30,7 @@ const Login = ({navigation}) => {
         setPassword('');
         // Navigate to the home page or perform any other desired action
 
-        // navigation.navigate('Main');
+        navigation.navigate('Discover');
       } else {
         console.log('Login failed');
 
@@ -46,7 +46,7 @@ const Login = ({navigation}) => {
       await logout(navigation);
       console.log('Sign-out successful');
       // Optionally, you can navigate to the login screen or any other screen after sign-out
-      // navigation.navigate('Home');
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Sign-out failed:', error.message);
     }

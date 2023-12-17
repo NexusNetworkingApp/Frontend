@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
 
             if (loginSuccessful) {
                 setIsLoggedIn(true);
+                console.log(isLoggedIn);
                 // Save to AsyncStorage
                 AsyncStorage.setItem('isLoggedIn', 'true');
 
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }) => {
                 setAccount(accountData);
                 AsyncStorage.setItem('account', JSON.stringify(accountData));
                 console.log('Account Data:', accountData);
+                // navigation.navigate('Signup');
             } else {
                 console.log('Login failed');
             }
@@ -46,7 +48,7 @@ export const AuthProvider = ({ children }) => {
         AsyncStorage.removeItem('account');
         // Consider using navigation to redirect to the home screen in a real app
         // Example: navigation.navigate('Home');
-        navigation.navigate('Home');
+        //navigation.navigate('Home');
     };
 
     useEffect(() => {

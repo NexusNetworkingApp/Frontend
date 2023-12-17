@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Switch,View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+const Tab = createBottomTabNavigator();
 const Signup = ({ navigation }) => {
   const [userType, setUserType] = useState('INDIVIDUAL');
 
@@ -56,7 +58,7 @@ const Signup = ({ navigation }) => {
       } else if (userType === 'ORGANIZATION') {
         response = await axios.post(`${API_URL}/account/create-organization`, userData);
       }
-      navigation.navigate('Main');
+      navigation.navigate('Login') 
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('API Error:', error.message);

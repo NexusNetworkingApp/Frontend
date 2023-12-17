@@ -12,14 +12,15 @@ import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs({ userType }) {
+function MyTabs({ userType}) {
+  
   return (
     <Tab.Navigator initialRouteName="Discover">
   <Tab.Screen
     name="Discover"
     component={Discover}
     options={{
-      tabBarLabel: userType,
+      tabBarLabel: 'Discover',
       tabBarIcon: ({ color, size }) => (
         <MaterialCommunityIcons name="home" color={color} size={size} />
       ),

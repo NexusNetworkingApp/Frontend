@@ -1,3 +1,8 @@
+let debug = require('debug');
+
+debug.enable('axios');
+
+
 import 'react-native-gesture-handler';
 import React from 'react';
 import { AppRegistry } from 'react-native';
