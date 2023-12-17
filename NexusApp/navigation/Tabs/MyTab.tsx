@@ -1,69 +1,86 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Jobs from '../Screens/Jobs'; // Import your Jobs screen here
-import Discover from '../Screens/Discover'; // Import your Discover screen here
-import Likes from '../Screens/Likes'; // Import your Likes screen here
-import Chat from '../Screens/Chat'; // Import your Chat screen here
-import Profile from '../Screens/Profile'; // Import your Profile screen here
-import SignUp from '../Screens/SignUp'; // Import your SignUp screen here
+import Jobs from '../Screens/Jobs';
+import Discover from '../Screens/Discover';
+import Likes from '../Screens/Likes';
+import Chat from '../Screens/Chat';
+import Profile from '../Screens/Profile';
 import Standouts from '../Screens/Standouts';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
-type TabObject = {
-  name: string;
-  component: React.FC;
-  icon: string;
-};
-
-function MyTabs({ userType }: { userType: string }) {
-  const [tabs, setTabs] = useState<TabObject[]>([]);
-
-  useEffect(() => {
-    // Customize tabs based on user type
-    if (userType === 'individual') {
-      setTabs([
-        { name: 'Discover', component: Discover, icon: 'home' },
-        { name: 'Jobs', component: Jobs, icon: 'account' },
-        { name: 'Likes', component: Likes, icon: 'account' },
-        { name: 'Chat', component: Chat, icon: 'bell' },
-        { name: 'Profile', component: Profile, icon: 'account' },
-      ]);
-    } else if (userType === 'organization') {
-      setTabs([
-        { name: 'Discover', component: Discover, icon: 'home' },
-        { name: 'Standouts', component: Standouts, icon: 'account' },
-        { name: 'Likes', component: Likes, icon: 'account' },
-        { name: 'Chat', component: Chat, icon: 'bell' },
-        { name: 'Profile', component: Profile, icon: 'account' },
-        // Customize organization tabs as needed
-      ]);
-    }
-  }, [userType]);
-
+function MyTabs({ userType }) {
   return (
-    <Tab.Navigator
-      initialRouteName="Discover"
-      screenOptions={({ route }) => ({
-        tabBarLabel: route.name,
-        tabBarIcon: ({ color, size }) => {
-          const tab = tabs.find((t) => t.name === route.name);
-          if (tab) {
-            return <MaterialCommunityIcons name={tab.icon} color={color} size={size} />;
-          }
-        },
-        tabBarOptions: {
-          activeTintColor: '#e91e63',
-        },
-      })}
-    >
-      {tabs.map((tab) => (
-        <Tab.Screen key={tab.name} name={tab.name} component={tab.component} />
-      ))}
-    </Tab.Navigator>
+    <Tab.Navigator initialRouteName="Discover">
+  <Tab.Screen
+    name="Discover"
+    component={Discover}
+    options={{
+      tabBarLabel: userType,
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="home" color={color} size={size} />
+      ),
+    }}
+  />
+  {userType === 'INDIVIDUAL' ? (
+    <Tab.Screen
+      name="Jobs"
+      component={Jobs}
+      options={{
+        tabBarLabel: 'Jobs',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="account" color={color} size={size} />
+        ),
+      }}
+    />
+  ) : userType === 'ORGANIZATION' ? (
+    <Tab.Screen
+      name="Standouts"
+      component={Standouts}
+      options={{
+        tabBarLabel: 'Standouts',
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="account" color={color} size={size} />
+        ),
+      }}
+    />
+  ) : null}
+  <Tab.Screen
+    name="Likes"
+    component={Likes}
+    options={{
+      tabBarLabel: 'Likes',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="account" color={color} size={size} />
+      ),
+    }}
+  />
+  <Tab.Screen
+    name="Chat"
+    component={Chat}
+    options={{
+      tabBarLabel: 'Chat',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="bell" color={color} size={size} />
+      ),
+    }}
+  />
+  <Tab.Screen
+    name="Profile"
+    component={Profile}
+    options={{
+      tabBarLabel: 'Profile',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="account" color={color} size={size} />
+      ),
+    }}
+  />
+</Tab.Navigator>
+
   );
-  
 }
 
 export default MyTabs;

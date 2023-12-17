@@ -3,8 +3,8 @@ import { Switch,View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Scr
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
 
-const Signup = () => {
-  const [userType, setUserType] = useState('individual');
+const Signup = ({ navigation }) => {
+  const [userType, setUserType] = useState('INDIVIDUAL');
 
   const [individualFormData, setIndividualFormData] = useState({
     email: '',
@@ -33,7 +33,7 @@ const Signup = () => {
   });
 
   const handleChange = (name, value) => {
-    const formData = userType === 'individual' ? setIndividualFormData : setOrganizationFormData;
+    const formData = userType === 'INDIVIDUAL' ? setIndividualFormData : setOrganizationFormData;
 
     formData((prevData) => ({
       ...prevData,
@@ -46,17 +46,17 @@ const Signup = () => {
   };
 
   const handleSubmit = async () => {
-    const userData = userType === 'individual' ? individualFormData : organizationFormData;
+    const userData = userType === 'INDIVIDUAL' ? individualFormData : organizationFormData;
 
     try {
       let response;
       console.log(userData);
-      if (userType === 'individual') {
+      if (userType === 'INDIVIDUAL') {
         response = await axios.post(`${API_URL}/account/create-individual`, userData);
-      } else if (userType === 'organization') {
+      } else if (userType === 'ORGANIZATION') {
         response = await axios.post(`${API_URL}/account/create-organization`, userData);
       }
-
+      navigation.navigate('Main');
       console.log('API Response:', response.data);
     } catch (error) {
       console.error('API Error:', error.message);
@@ -70,13 +70,13 @@ const Signup = () => {
         <View>
           <Text>Account Type:</Text>
           <View style={styles.selectContainer}>
-            <TouchableOpacity onPress={() => handleUserTypeChange('individual')}>
-              <Text style={[styles.accountType, userType === 'individual' && styles.selected]}>
+            <TouchableOpacity onPress={() => handleUserTypeChange('INDIVIDUAL')}>
+              <Text style={[styles.accountType, userType === 'INDIVIDUAL' && styles.selected]}>
                 Individual
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleUserTypeChange('organization')}>
-              <Text style={[styles.accountType, userType === 'organization' && styles.selected]}>
+            <TouchableOpacity onPress={() => handleUserTypeChange('ORGANIZATION')}>
+              <Text style={[styles.accountType, userType === 'ORGANIZATION' && styles.selected]}>
                 Organization
               </Text>
             </TouchableOpacity>
@@ -88,21 +88,18 @@ const Signup = () => {
           <TextInput
             style={styles.input}
             keyboardType="email-address"
-            value={userType === 'individual' ? individualFormData.email : organizationFormData.email}
+            value={userType === 'INDIVIDUAL' ? individualFormData.email : organizationFormData.email}
             onChangeText={(value) => handleChange('email', value)} 
-            required
           />
 
           <Text>Password:</Text>
           <TextInput
             style={styles.input}
             secureTextEntry
-            value={userType === 'individual' ? individualFormData.passwordHash : organizationFormData.passwordHash}
+            value={userType === 'INDIVIDUAL' ? individualFormData.passwordHash : organizationFormData.passwordHash}
             onChangeText={(value) => handleChange('passwordHash', value)}
-            minLength={8}
-            required
           />
-          {userType === 'individual' && (
+          {userType === 'INDIVIDUAL' && (
             <>
             <Text>First Name:</Text>
             <TextInput
@@ -157,14 +154,13 @@ const Signup = () => {
             </>
           )}
 
-          {userType === 'organization' && (
+          {userType === 'ORGANIZATION' && (
             <>
               <Text>Organization Name:</Text>
               <TextInput
                 style={styles.input}
                 value={organizationFormData.organizationName}
                 onChangeText={(value) => handleChange('organizationName', value)}
-                required
               />
 
               <Text>Founded Date:</Text>

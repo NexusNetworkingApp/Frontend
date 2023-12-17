@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
+    const logout = (navigation) => {
         setIsLoggedIn(false);
         setAccount(null);
         // Remove from AsyncStorage
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
         AsyncStorage.removeItem('account');
         // Consider using navigation to redirect to the home screen in a real app
         // Example: navigation.navigate('Home');
+        navigation.navigate('Home');
     };
 
     useEffect(() => {
@@ -54,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout, account }}>
-            {children}
+            {children }
         </AuthContext.Provider>
     );
 };

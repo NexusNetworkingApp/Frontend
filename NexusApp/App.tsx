@@ -1,22 +1,37 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AuthProvider, useAuth } from './AuthContext';
+import 'react-native-gesture-handler';
+import React, {useState, useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {AuthProvider, useAuth} from './AuthContext';
 import Home from './navigation/Screens/Home';
 import Signup from './navigation/Screens/SignUp';
 import Login from './navigation/Screens/login';
-import Chat from './navigation/Screens/Chat';
-import Jobs from './navigation/Screens/Jobs';
-import Likes from './navigation/Screens/Likes';
-import Profile from './navigation/Screens/Profile';
-import Discover from './navigation/Screens/Discover';
-import Standouts from './navigation/Screens/Standouts';
 import MyTabs from './navigation/Tabs/MyTab';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const { isLoggedIn } = useAuth();
+  const {isLoggedIn} = useAuth();
+  const [account, setAccount] = useState(null);
+
+  useEffect(() => {
+    const retrieveAccount = async () => {
+      try {
+        // Retrieve account information from AsyncStorage
+        const storedAccount = await AsyncStorage.getItem('account');
+        if (storedAccount !== null) {
+          // If there is stored account information, parse and set it
+          setAccount(JSON.parse(storedAccount));
+        }
+      } catch (error) {
+        // Handle errors if any
+        console.error('Error retrieving account information:', error);
+      }
+    };
+
+    retrieveAccount();
+  }, []);
 
   return (
     <AuthProvider>
@@ -25,16 +40,13 @@ function App() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="Login" component={Login} />
-          {isLoggedIn && (
-            <>
-              <Stack.Screen name="Chat" component={Chat} />
-              <Stack.Screen name="Discover" component={Discover} />
-              <Stack.Screen name="Jobs" component={Jobs} />
-              <Stack.Screen name="Likes" component={Likes} />
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="Standouts" component={Standouts} />
-              <MyTabs userType={userType} />
-            </>
+
+          {isLoggedIn && account && (
+            <Stack.Screen name="Main">
+              {() => (
+                <MyTabs userType={account.accountType} />
+              )}
+            </Stack.Screen>
           )}
         </Stack.Navigator>
       </NavigationContainer>
