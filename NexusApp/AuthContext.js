@@ -2,12 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from './util/URL';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import MMKVStorage from 'react-native-mmkv-storage';
 
 const AuthContext = createContext();
+const mmkv = new MMKVStorage.Loader().initialize();
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
-        return AsyncStorage.getItem('isLoggedIn').then(value => value === 'true');
+        return mmkv.getBool('isLoggedIn');
     });
     const [account, setAccount] = useState(null);
 
@@ -19,16 +21,18 @@ export const AuthProvider = ({ children }) => {
             if (loginSuccessful) {
                 setIsLoggedIn(true);
                 console.log(isLoggedIn);
-                // Save to AsyncStorage
-                AsyncStorage.setItem('isLoggedIn', 'true');
+
+                // Save to MMKVStorage
+                mmkv.setBool('isLoggedIn', true);
 
                 // Fetch account information and save it
                 const accountResponse = await axios.get(`${API_URL}/account/info/${accountType.toUpperCase()}/${email}`);
                 const accountData = accountResponse.data;
                 setAccount(accountData);
-                AsyncStorage.setItem('account', JSON.stringify(accountData));
+                mmkv.setMap('account', accountData); // Assuming accountData is an object
+                console.log(mmkv.getMap('account'))
                 console.log('Account Data:', accountData);
-                // navigation.navigate('Signup');
+
             } else {
                 console.log('Login failed');
             }
@@ -40,15 +44,13 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = (navigation) => {
+    const logout = () => {
         setIsLoggedIn(false);
         setAccount(null);
-        // Remove from AsyncStorage
-        AsyncStorage.removeItem('isLoggedIn');
-        AsyncStorage.removeItem('account');
-        // Consider using navigation to redirect to the home screen in a real app
-        // Example: navigation.navigate('Home');
-        //navigation.navigate('Home');
+
+        // Remove from MMKVStorage
+        mmkv.removeItem('isLoggedIn');
+        mmkv.removeItem('account');
     };
 
     useEffect(() => {
@@ -57,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout, account }}>
-            {children }
+            {children}
         </AuthContext.Provider>
     );
 };

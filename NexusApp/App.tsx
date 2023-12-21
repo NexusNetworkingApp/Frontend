@@ -9,8 +9,11 @@ import Signup from './navigation/Screens/SignUp';
 import Login from './navigation/Screens/login';
 import MyTabs from './navigation/Tabs/MyTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MMKVStorage from 'react-native-mmkv-storage';
+import Message from './navigation/Screens/Message';
 
 const Stack = createNativeStackNavigator();
+const mmkv = new MMKVStorage.Loader().initialize();
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -19,16 +22,12 @@ function App() {
   useEffect(() => {
     const fetchAccount = async () => {
       try {
-        const storedAccount = await AsyncStorage.getItem('account');
-        console.log('Stored account:', storedAccount);
-
+        const storedAccount = mmkv.getMap('account');
         if (storedAccount) {
-          const parsedAccount = JSON.parse(storedAccount);
-          console.log('Parsed account:', parsedAccount);
-          setAccount(parsedAccount);
+          setAccount(storedAccount);
         }
       } catch (error) {
-        console.error('Error fetching account from AsyncStorage:', error);
+        console.error('Error retrieving account information:', error.message);
       }
     };
 
@@ -42,10 +41,10 @@ function App() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="Login" component={Login} />
-
-          {isLoggedIn && account ? (
+          <Stack.Screen name="Message" component={Message} />
+          {isLoggedIn && account? (
             // Directly navigate to MyTabs and pass user type as a parameter
-            <Stack.Screen name="MyTabs">
+            <Stack.Screen name="MyTabs" >
               {() => (
                 <MyTabs userType={account.accountType} />
               )}

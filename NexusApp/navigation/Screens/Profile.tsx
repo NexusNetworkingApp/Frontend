@@ -1,30 +1,39 @@
 // https://github.com/DesignIntoCode/ReactProfile02/tree/master
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import demoprofiles from "../../assets/data/demoprofiles";
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import { StyleSheet, Text, View, SafeAreaView, ScrollView} from "react-native";
+import { TouchableOpacity } from 'react-native';
+import MMKVStorage from 'react-native-mmkv-storage';
+import { useNavigation } from '@react-navigation/native';
 
+const mmkv = new MMKVStorage.Loader().initialize();
 
 export default function Profile() {
+    const navigation = useNavigation();
     const [account, setAccount] = useState(null);
 
     useEffect(() => {
         const fetchAccount = async () => {
-            try {
-                const storedAccount = await AsyncStorage.getItem('account');
-                if (storedAccount) {
-                    setAccount(JSON.parse(storedAccount));
-                }
-            } catch (error) {
-                console.error('Error retrieving account information:', error.message);
+          try {
+            const storedAccount = mmkv.getString('account');
+            if (storedAccount) {
+              setAccount(JSON.parse(storedAccount));
             }
+          } catch (error) {
+            console.error('Error retrieving account information:', error.message);
+          }
         };
-
-        fetchAccount();
-    }, []);
     
+        fetchAccount();
+      }, []);
+    
+      const handleLogout = () => {
+        // Clear account information from MMKV
+        mmkv.removeItem('account');
+        mmkv.removeItem('isLoggedIn');
+    
+        // Navigate back to the home screen
+        navigation.navigate('Home');
+      };
 
     if (!account) {
         return (
@@ -37,36 +46,77 @@ export default function Profile() {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.titleBar}>
-                    <Ionicons name="ios-arrow-back" size={24} color="#52575D" />
-                    <Ionicons name="md-create" size={24} color="#52575D" />
-                </View>
-
-                {/* Conditional rendering for INDIVIDUAL account type */}
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
                 {account.accountType === 'INDIVIDUAL' && (
                     <>
                         <View style={styles.infoContainer}>
-                            <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Julie</Text>
-                            <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Photographer</Text>
+                            <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{account.individual.firstName} {account.individual.lastName}</Text>
                         </View>
                         <View style={styles.sectionContainer}>
-                            <Text style={styles.sectionTitle}>Interests</Text>
-                            <Text style={styles.sectionContent}>Photography, Travel, Technology</Text>
+                            <Text style={styles.sectionTitle}>Email</Text>
+                            <Text style={styles.sectionContent}> {account.individual.email}</Text>
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Gender</Text>
+                            <Text style={styles.sectionContent}>{account.individual.gender}</Text>
                         </View>
                         {/* Skills Section */}
                         <View style={styles.sectionContainer}>
-                            <Text style={styles.sectionTitle}>Skills</Text>
-                            <Text style={styles.sectionContent}>Portrait Photography, Adobe Photoshop, Lightroom</Text>
+                            <Text style={styles.sectionTitle}>Receive Notification</Text>
+                            <Text style={styles.sectionContent}>{account.individual.receiveNotifications}</Text>
                         </View>
                         {/* Work History Section */}
                         <View style={styles.sectionContainer}>
-                            <Text style={styles.sectionTitle}>Work History</Text>
-                            <Text style={styles.sectionContent}>Freelance Photographer (2018 - Present)</Text>
-                            <Text style={styles.sectionContent}>Studio XYZ Photographer (2016 - 2018)</Text>
+                            <Text style={styles.sectionTitle}>Biography</Text>
+                            <Text style={styles.sectionContent}>{account.individual.biography}</Text>
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Zip Code</Text>
+                            <Text style={styles.sectionContent}>{account.individual.location}</Text>
                         </View>
                     </>
                 )}
-
+                {account.accountType === 'ORGANIZATION' && (
+                    <>
+                        <View style={styles.infoContainer}>
+                            <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}> {account.organization.organizationName}</Text>
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Email</Text>
+                            <Text style={styles.sectionContent}>{account.organization.email}</Text>
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Found Date</Text>
+                            <Text style={styles.sectionContent}>{account.organization.foundedDate}</Text>
+                        </View>
+                        {/* Skills Section */}
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Industry</Text>
+                            <Text style={styles.sectionContent}>{account.organization.industry}</Text>
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Receive Notification</Text>
+                            <Text style={styles.sectionContent}>{account.organization.receiveNotifications}</Text>
+                        </View>
+                        {/* Work History Section */}
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Biography</Text>
+                            <Text style={styles.sectionContent}>{account.organization.biography}</Text>
+                            
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Verified</Text>
+                            <Text style={styles.sectionContent}>{account.organization.verified}</Text>
+                            
+                        </View>
+                        <View style={styles.sectionContainer}>
+                            <Text style={styles.sectionTitle}>Zip Code</Text>
+                            <Text style={styles.sectionContent}>{account.organization.location}</Text>
+                        </View>
+                    </>
+                )}
                 <View style={{ marginTop: 32 }}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                         {/* ... (unchanged) */}
@@ -145,5 +195,17 @@ const styles = StyleSheet.create({
         marginTop: 8,
         fontSize: 16,
         color: "#AEB5BC"
-    }
+    },
+    logoutButton: {
+        backgroundColor: '#FF6347',
+        padding: 16,
+        borderRadius: 8,
+        marginTop: 16,
+        alignItems: 'center',
+      },
+      logoutButtonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
 });
