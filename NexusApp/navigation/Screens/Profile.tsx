@@ -24,7 +24,7 @@ export default function Profile() {
         };
     
         fetchAccount();
-      }, []);
+    }, []);
     
       const handleLogout = () => {
         // Clear account information from MMKV
@@ -33,6 +33,14 @@ export default function Profile() {
     
         // Navigate back to the home screen
         navigation.navigate('Home');
+      };
+      const handlejobposting = () => {
+        // Clear account information from MMKV
+        mmkv.removeItem('account');
+        mmkv.removeItem('isLoggedIn');
+    
+        // Navigate back to the home screen
+        navigation.navigate('jobposting');
       };
 
     if (!account) {
@@ -115,6 +123,9 @@ export default function Profile() {
                             <Text style={styles.sectionTitle}>Zip Code</Text>
                             <Text style={styles.sectionContent}>{account.organization.location}</Text>
                         </View>
+                        <TouchableOpacity style={styles.logoutButton} onPress={handlejobposting}>
+                            <Text style={styles.logoutButtonText}>Post a job!</Text>
+                        </TouchableOpacity>
                     </>
                 )}
                 <View style={{ marginTop: 32 }}>

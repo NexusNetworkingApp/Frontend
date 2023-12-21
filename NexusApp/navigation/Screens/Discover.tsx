@@ -90,11 +90,13 @@ const Discover = () => {
         {error && <Text style={styles.errorText}>{error}</Text>}
         {discoverProfile && (
           <View style={styles.profileContainer}>
+            <Text style={styles.header}>
+              {discoverProfile.accountType === 'INDIVIDUAL'
+                ? `${discoverProfile.individual.firstName} ${discoverProfile.individual.lastName}`
+                : discoverProfile.organization.organizationName}
+            </Text>
             {discoverProfile.accountType === 'INDIVIDUAL' && (
               <>
-                <Text style={styles.header}>
-                  {discoverProfile.individual.firstName} {discoverProfile.individual.lastName}
-                </Text>
                 <Text style={styles.detailText}>Gender: {discoverProfile.individual.gender}</Text>
                 <Text style={styles.detailText}>Biography: {discoverProfile.individual.biography}</Text>
                 <Text style={styles.detailText}>Location: {discoverProfile.individual.location}</Text>
@@ -102,7 +104,6 @@ const Discover = () => {
             )}
             {discoverProfile.accountType === 'ORGANIZATION' && (
               <>
-                <Text style={styles.header}>{discoverProfile.organization.organizationName}</Text>
                 <Text style={styles.detailText}>Founded Date: {discoverProfile.organization.foundedDate}</Text>
                 <Text style={styles.detailText}>Industry: {discoverProfile.organization.industry}</Text>
                 <Text style={styles.detailText}>Biography: {discoverProfile.organization.biography}</Text>
@@ -112,8 +113,10 @@ const Discover = () => {
             )}
           </View>
         )}
-        <Button title="Next" onPress={handleNext} disabled={loading} />
-        <Button title="Like" onPress={handleLike} disabled={loading} />
+        <View style={styles.buttonContainer}>
+          <Button title="Next" onPress={handleNext} disabled={loading} />
+          <Button title="Like" onPress={handleLike} disabled={loading} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -122,37 +125,40 @@ const Discover = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 16,
-    alignSelf: "center",
+    alignSelf: 'center',
+    color: '#333', // Adjust color for better visibility
   },
   loadingText: {
     fontSize: 16,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginVertical: 16,
+    color: '#555', // Adjust color for better visibility
   },
   errorText: {
     color: 'red',
     fontSize: 16,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginVertical: 16,
   },
   profileContainer: {
     paddingHorizontal: 20,
     marginBottom: 16,
   },
-  nameText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
   detailText: {
     fontSize: 16,
     marginBottom: 8,
+    color: '#666', // Adjust color for better visibility
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 20,
   },
 });
 

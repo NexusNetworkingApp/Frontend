@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Linking } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
 
@@ -21,7 +21,7 @@ const Jobs = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Jobs</Text>
+      
       <FlatList
         data={jobs}
         keyExtractor={(item) => item.jobId.toString()}
@@ -36,10 +36,13 @@ const Jobs = () => {
               {/* Add other job details as needed */}
               <TouchableOpacity
                 style={styles.applyButton}
+                
                 onPress={() => {
-                  // Replace 'https://example.com/apply-job' with the actual external URL
-                  // You may want to open the URL in a WebView or implement a navigation solution
-                  console.log(`Apply button pressed for job ${item.jobId}`);
+                  const description = String(item.description);
+                  const jobUrl = description; // Replace with the actual external URL
+                  Linking.openURL(jobUrl).catch((err) =>
+                    console.error('Error opening URL:', err)
+                  );
                 }}
               >
                 <Text style={styles.applyButtonText}>Apply</Text>

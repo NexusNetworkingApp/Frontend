@@ -63,8 +63,7 @@ const Likes = () => {
 
   return (
     <View>
-      <Text>Likes</Text>
-
+      
       {loading && <Text>Loading...</Text>}
       {error && <Text style={{ color: 'red' }}>{error}</Text>}
 

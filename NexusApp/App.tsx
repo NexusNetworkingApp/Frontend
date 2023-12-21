@@ -11,6 +11,7 @@ import MyTabs from './navigation/Tabs/MyTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MMKVStorage from 'react-native-mmkv-storage';
 import Message from './navigation/Screens/Message';
+import JobPosting from './navigation/Screens/jobposting';
 
 const Stack = createNativeStackNavigator();
 const mmkv = new MMKVStorage.Loader().initialize();
@@ -20,19 +21,19 @@ function App() {
   const [account, setAccount] = useState(null);
 
   useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const storedAccount = mmkv.getMap('account');
-        if (storedAccount) {
-          setAccount(storedAccount);
-        }
-      } catch (error) {
-        console.error('Error retrieving account information:', error.message);
-      }
-    };
-
-    fetchAccount();
-  }, []);
+        const fetchAccount = async () => {
+          try {
+            const storedAccount = mmkv.getString('account');
+            if (storedAccount) {
+              setAccount(JSON.parse(storedAccount));
+            }
+          } catch (error) {
+            console.error('Error retrieving account information:', error.message);
+          }
+        };
+    
+        fetchAccount();
+    }, []);
 
   return (
     <AuthProvider>
@@ -42,14 +43,20 @@ function App() {
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Message" component={Message} />
-          {isLoggedIn && account? (
+          <Stack.Screen name="jobposting" component={JobPosting} />
+          <Stack.Screen name="MyTabs" >
+              {() => (
+                <MyTabs userType={account.accountType} />
+              )}
+            </Stack.Screen>
+          {/* {isLoggedIn && account? (
             // Directly navigate to MyTabs and pass user type as a parameter
             <Stack.Screen name="MyTabs" >
               {() => (
                 <MyTabs userType={account.accountType} />
               )}
             </Stack.Screen>
-          ) : null}
+          ) : null} */}
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>
